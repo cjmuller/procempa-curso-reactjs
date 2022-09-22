@@ -1,47 +1,41 @@
-import { useState } from 'react';
-import Titulo from './components/Titulo';
-import Botao from './components/Botao';
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from 'react-router-dom';
+
+import { ThemeProvider } from 'styled-components';
+import { dark, light } from './Theme';
+
+import Home from  './pages/Home';
+import Departamentos from  './pages/Departamentos';
+import Menu from  './components/Menu';
+import DepartamentoDetalhes from './pages/DepartamentoDetalhes';
+import NotFound from './pages/NotFound';
+import FormDepartamento from './pages/FormDepartamento';
+import './assets/scss/main.scss';
 
 function App() {
 
-  const [count, setCount] = useState(0);
-
-  const [count2, setCount2] = useState(0);
-
-  const [curso, setCurso] = useState(null);
-
   return (
-    <>
+    <ThemeProvider theme={light}>
+      <BrowserRouter>
+        <Menu />
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+          
+          <Route path='/departamentos'>
+            <Route index element={<Departamentos/>}/>
+            <Route path=':idDepartamento' element={<DepartamentoDetalhes/>}/>
+            <Route path='new' element={<FormDepartamento/>}/>
+          </Route>
 
-      <Titulo nome_curso={curso}/>
+          <Route path='*' element={<NotFound/>}/>
 
-      <input type="radio" id="reactjs" name="rd_curso" value="React JS" onClick={(e) =>{
-        setCurso(e.target.value);
-      }}></input><label>React JS</label><br/>
-      <input type="radio" id="nodejs" name="rd_curso" value="Node JS" onClick={(e) =>{
-        setCurso(e.target.value);
-      }}></input><label>Node JS</label><br/>
-      <input type="radio" id="jscsspro" name="rd_curso" value="JS e CSS Pro" onClick={(e) =>{
-        setCurso(e.target.value);
-      }}></input><label>JS e CSS Pro</label><br/>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
 
-      <p>Contador: {count}</p>
-
-      {/* Componente Botao */}
-      <Botao onClick={() =>{
-        setCount(count+1);
-      }}/>
-
-      <p>Contador 2: {count2}</p>
-
-      <Botao label = "< Contador" onClick={() =>{
-        setCount2(count2-1);
-      }}/>
-      <Botao label = "Contador >" onClick={() =>{
-        setCount2(count2+1);
-      }}/>
-
-    </>
   );
 
 }
