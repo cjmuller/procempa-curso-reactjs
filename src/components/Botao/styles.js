@@ -1,31 +1,33 @@
-import styled from 'styled-components';
-import Botao from './index';
+import styled, {css} from 'styled-components';
 
-const StyledBotao = styled(Botao)`  
-    color:  ${(props) => {
-                            if (props.uiType === 'Success') { 
-                                return 'white'; 
-                            } else if (props.uiType === 'Danger') { 
-                                return 'white';
-                            } else {
-                                return '';
-                            }
-                         } 
-             };
-    background:  ${(props) => {
-                                if (props.uiType === 'Success') { 
-                                    return '#198754'; 
-                                } else if (props.uiType === 'Danger') { 
-                                    return '#dc3545';
-                                } else if (props.uiType === 'Warning') { 
-                                    return '#ffc107';
-                                } else {
-                                    return '#e1e1e1';
-                                }
+const getUiType = (uiType) => {
+    switch(uiType) {
+      case 'success':
+        return (css`
+          background: #198754;
+          color: white;
+        `)
+      case 'danger':
+        return (css`
+          background: #dc3545;
+          color: white;
+        `)
+      case 'warning':
+        return (css`
+          background: #ffc107;
+        `)
+      default:
+        return (css`
+          background: ${({ theme }) => theme.colors.background};
+        `)
+    }
+  }
 
-                            }
-             };
+const BaseBotao = styled.button`
+    font-weight: bold;
+    padding: 8px;
 
+    ${props => getUiType(props.uiType)}
 `;
 
-export default StyledBotao;
+export default BaseBotao;

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import StyledBotao from "../../components/Botao";
-import Mensagem from "./styles";
+import React, { useState, useEffect } from "react";
+import Botao from "../../components/Botao";
+import { Mensagem } from "./styles";
+import { insertDepartamentos } from "../../services/departamentos";
+import Texto from "../../components/Texto";
 
 const FormDepartamento = () => {
 
@@ -8,6 +10,35 @@ const FormDepartamento = () => {
     const [sigla, setSigla] = useState('');
     const [msg, setMsg] = useState('');
     const [type, setType] = useState('erro');
+
+    let obj = {};
+
+    const [insertDepartamento, setinsertDepartamento] = useState();
+
+    const asyncInsertDepartamentos = async (obj) => {
+        setMsg('Aguarde...');
+        setType('aviso');
+
+        setinsertDepartamento(await insertDepartamentos(obj));
+    }
+
+    useEffect(() => {
+        console.log(insertDepartamento);
+        if (insertDepartamento !== undefined) {
+            if (typeof insertDepartamento === 'object') {
+                // sucesso
+                setMsg('Sucesso');
+                setType('sucesso');
+                setNome('');
+                setSigla('');
+            } else {
+                setMsg('Erro:' + insertDepartamento);
+                setType('erro');
+                setNome('');
+                setSigla('');
+            }    
+        }
+    }, [insertDepartamento]);
 
     // validacao do formulario
     const validaForm = () => {
@@ -23,26 +54,33 @@ const FormDepartamento = () => {
             return false;
         }
 
+        // monta obj
+        obj.sigla = sigla;
+        obj.nome = nome;
+
+        asyncInsertDepartamentos(obj);
+        //insertDepartamentos(obj);
+
         // sucesso
-        setMsg('Sucesso');
-        setType('sucesso');
-        setNome('');
-        setSigla('');
+        // setMsg('Sucesso');
+        // setType('sucesso');
+        // setNome('');
+        // setSigla('');
 
     }
 
     return (
         <>
-            <h1>New Departamento</h1>
-            <p/>Nome: <input type="text" name="nome" id="nome" placeholder="Nome" value={nome} 
+            <h1>Adicionar Departamento</h1>
+            <Texto type="text" name="nome" id="nome" placeholder="Nome..." value={nome} 
                            onChange={(e) => {
                             setNome(e.target.value);
                            }}/>
-            <p/>Sigla: <input type="text" name="sigla" id="sigla" placeholder="Sigla" value={sigla}
+            <Texto type="text" name="sigla" id="sigla" placeholder="Sigla..." value={sigla}
                             onChange={(e) => {
                             setSigla(e.target.value);
                             }}/>
-            <p/><StyledBotao titulo="Enviar" onClick={validaForm} uiType="Success"></StyledBotao>
+            <Botao label="Enviar" onClick={validaForm} uiType="Success"></Botao>
             <br/>
             <Mensagem type={type}>{msg}</Mensagem>
         </>

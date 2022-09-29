@@ -1,35 +1,31 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-//import Card from './index';
 
-export const StyledCardLink = styled(Link)`
-    background: #E1E1E1;
-    padding: 30px;
-    display: flex;
-    align-items: center;
-`;
-
-export const DivCard = styled.div`
-background: #E1E1E1;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  transition: 0.3s;
-  width: 20%;
-    
-`;
-
-export const DivMain = styled.div`
-    display: flex;
-        
-`;
-
-export const DivBotao = styled.div`
-  //box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-  //transition: 0.3s;
-  background: #E1E1E1;
-  width: 20%;
+const CardLink = styled(Link)`
+  background: ${({ theme }) => theme.colors.background};
+  color:  #002244;
+  text-decoration: none;
   display: flex;
-  padding: 20px;
-  gap: 100%;
+  width: 300px;
+  height: 150px;
+  border-radius: 4px;
+  align-items: center;
+  /* justify-content: center; */
+  /* flex-direction: column; */
+  margin: 10px;
+  /* FAZ COM QUE OS BOTÕES FIQUEM NO CENTRO E ABAIXO DO TITULO */
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  h3, button {
+    display: inline-block;
+  }
+  h3 {
+    width: 100%;
+    text-align: center;
+  }
+  button {
+    flex: 0;
+  }
 `;
 
-export default StyledCardLink;
+export default CardLink;
