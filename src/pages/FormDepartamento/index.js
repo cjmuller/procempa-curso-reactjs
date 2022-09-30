@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Botao from "../../components/Botao";
 import { Mensagem } from "./styles";
 import { insertDepartamentos } from "../../services/departamentos";
@@ -10,35 +10,6 @@ const FormDepartamento = () => {
     const [sigla, setSigla] = useState('');
     const [msg, setMsg] = useState('');
     const [type, setType] = useState('erro');
-
-    let obj = {};
-
-    const [insertDepartamento, setinsertDepartamento] = useState();
-
-    const asyncInsertDepartamentos = async (obj) => {
-        setMsg('Aguarde...');
-        setType('aviso');
-
-        setinsertDepartamento(await insertDepartamentos(obj));
-    }
-
-    useEffect(() => {
-        console.log(insertDepartamento);
-        if (insertDepartamento !== undefined) {
-            if (typeof insertDepartamento === 'object') {
-                // sucesso
-                setMsg('Sucesso');
-                setType('sucesso');
-                setNome('');
-                setSigla('');
-            } else {
-                setMsg('Erro:' + insertDepartamento);
-                setType('erro');
-                setNome('');
-                setSigla('');
-            }    
-        }
-    }, [insertDepartamento]);
 
     // validacao do formulario
     const validaForm = () => {
@@ -55,11 +26,25 @@ const FormDepartamento = () => {
         }
 
         // monta obj
+        let obj = {};
         obj.sigla = sigla;
         obj.nome = nome;
 
-        asyncInsertDepartamentos(obj);
-        //insertDepartamentos(obj);
+        (async () => {
+            const resp = await insertDepartamentos(obj);
+
+            if (resp.status && resp.status === 500) {
+                setMsg('Erro no servidor!');
+                setType('erro');
+            } else {
+                setMsg('Departamento cadastrado');
+                setMsg('Sucesso');
+                setType('sucesso');
+                setNome('');
+                setSigla('');
+            }
+
+        })()
 
         // sucesso
         // setMsg('Sucesso');
